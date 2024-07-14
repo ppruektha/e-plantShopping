@@ -7,6 +7,7 @@ export const CreatSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
+        alert("inside Additem in creatSlice");
         const { name, image, cost } = action.payload;
         const existingItem = state.items.find(item => item.name === name);
         if (existingItem) {

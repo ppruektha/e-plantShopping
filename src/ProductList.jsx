@@ -1,5 +1,7 @@
 import React, { useState,useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import { addItem } from './CreatSlice';
+
 
 import './ProductList.css'
 function ProductList() {
@@ -212,8 +214,10 @@ function ProductList() {
         }
     ];
     const [addedToCart, setAddedToCart] = useState({});
+ 
+
     const handleAddToCart = (product) => {
-        dispatch(addItem(product));
+        dispatch(addItem(cartItems, product));
         setAddedToCart((prevState) => ({
            ...prevState,
            [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
@@ -239,6 +243,8 @@ function ProductList() {
     fontSize: '30px',
     textDecoration: 'none',
    }
+
+
     return (
         <div>
              <div className="navbar" style={styleObj}>
