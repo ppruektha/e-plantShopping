@@ -6,6 +6,12 @@
   overflow: hidden;
 }
 
+.App {
+  min-height: 100vh;
+  background: url('https://cdn.pixabay.com/photo/2020/04/28/09/36/nature-5103636_1280.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
 .landing-page {
   position: relative;
   width: 100vw;
@@ -20,6 +26,8 @@
   width: 100%;
   height: 100%;
 background-color: lightgrey;
+background: url('https://cdn.pixabay.com/photo/2020/04/28/09/36/nature-5103636_1280.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
 .content {
@@ -111,6 +119,9 @@ background-color: lightgrey;
 .product-list-container.visible {
   top: 0;
 }
+
+
+
 /* LandingPage.css */
 @media screen and (max-width: 768px) {
   .content {

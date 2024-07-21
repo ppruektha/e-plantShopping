@@ -1,10 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { addItem } from './CreatSlice';
-
-
+import CartItem from "./CartItem";
 
 import './ProductList.css'
+
 function ProductList() {
     const dispatch = useDispatch();
     const plantsArray = [
@@ -214,8 +214,26 @@ function ProductList() {
             ]
         }
     ];
-    const [addedToCart, setAddedToCart] = useState({});
 
+   const [addedToCart, setAddedToCart] = useState({});
+   const [showCartItems, setShowCartItems] = useState(false);
+
+   const cart = useSelector((state) => state.cart);
+
+     // Define the function to calculate total items in the cart
+  const getTotalItems = () => {
+    let totalItems = 0;
+    if (cart.items.length !== 0) {
+      cart.items.forEach((item) => {
+        totalItems += item.quantity;
+      });
+    }
+    return totalItems;
+  };
+
+  const handleViewCart = () => {
+    setShowCartItems(!showCartItem);
+  };
 
     const handleAddToCart = (product) => {
         dispatch(addItem(product));
@@ -223,6 +241,7 @@ function ProductList() {
            ...prevState,
            [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
          }));
+         console.log('Cart:', cart);
       };
    const styleObj={
     backgroundColor: '#4CAF50',
@@ -245,17 +264,31 @@ function ProductList() {
     textDecoration: 'none',
    }
 
+   
+
+    const totalItems = getTotalItems();
+
+    const checkItemInCart = (plant) => {
+        const index = cart.items.findIndex(item => item.name === plant.name);
+          if (index !== -1) {
+            return true;
+          }else{
+            return false;
+          }
+      };
+
+    
 
     return (
         <div>
-             <div className="navbar" style={styleObj}>
+             <div id="top" className="navbar" style={styleObj}>
             <div className="tag">
                <div className="luxury">
                <img src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="" />
                <a href="/" style={{textDecoration:'none'}}>
                         <div>
-                    <h3 style={{color:'white'}}>Paradise Nursery</h3>
-                    <i style={{color:'white'}}>Where Green Meets Serenity</i>
+                    <h3 style={{color:'white'}}>Green Oasis</h3>
+                    <i style={{color:'white'}}>Make your home to be Oasis!!</i>
                     </div>
                     </a>
                 </div>
@@ -263,7 +296,20 @@ function ProductList() {
             </div>
             <div style={styleObjUl}>
                 <div> <a href="#" style={styleA}>Plants</a></div>
-                <div> <a href="#" style={styleA}><h1 className='cart'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68"><rect width="156" height="156" fill="none"></rect><circle cx="80" cy="216" r="12"></circle><circle cx="184" cy="216" r="12"></circle><path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" id="mainIconPathAttribute"></path></svg></h1></a></div>
+                <div><span>{console.log(totalItems)}</span></div>
+                <div>
+                    <a href="#cartItem" style={styleA} >
+                <div className="cart-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
+                    <rect width="156" height="156" fill="none"></rect>
+                    <circle cx="80" cy="216" r="12"></circle>
+                    <circle cx="184" cy="216" r="12"></circle>
+                    <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" id="mainIconPathAttribute"></path>
+                    </svg>
+                    <span className="cart-item-count">{totalItems}</span>
+                </div>
+                </a>
+                </div>
             </div>
         </div>
 
@@ -278,14 +324,18 @@ function ProductList() {
                     <div className="product-title">{plant.name}</div>
                     <div className="product-title">{plant.description}</div>
                     <div className="product-title">{plant.cost}</div>
-                    <button  onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                    <button className={checkItemInCart(plant) ? "product-button added-to-cart" : "product-button"} onClick={() => handleAddToCart(plant)}> {checkItemInCart(plant) ? 'Added to Cart' : 'Add to Cart'}</button>
                     </div>
                     ))}
                 </div>
                 </div>
             ))}
         </div>
-
+        
+        <div className={`cart-list-container ${showCartItems ? 'visible' : ''}`}>
+        <CartItem />
+        </div>
+       
     </div>
     );
 }
